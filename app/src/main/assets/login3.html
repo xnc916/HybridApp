@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>登录</title>
+</head>
+
+<body>
+
+<center>
+    <h2>用户登录</h2>
+    <form method="post" action="userlogin1">
+        <label>用户:</label> <input id="username" type="text" name="username"/> <br/>  <br/>
+        <label>密码:</label> <input id="password" type="password" name="password"/> <br/>  <br/>
+
+        <input id="btn" type="button" value="确定">
+    </form>
+</center>
+
+</body>
+
+<script>
+var btn = document.getElementById("btn");
+btn.onclick = function() {
+    WebViewJavascriptBridge.callHandler("showToast");
+}
+
+function reset(name, pwd) {
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    username.value = name;
+    password.value = pwd;
+}
+
+
+if (window.WebViewJavascriptBridge) {
+    WebViewJavascriptBridge.registerHandler("reset", function(data, responseCallback) {
+        var info = JSON.parse(data);
+        reset(info.username, info.password);
+    });
+} else {
+    document.addEventListener(
+        'WebViewJavascriptBridgeReady',
+        function() {
+            WebViewJavascriptBridge.registerHandler("reset", function(data, responseCallback) {
+                var info = JSON.parse(data);
+                reset(info.username, info.password);
+            });
+        },
+        false
+    );
+}
+
+
+</script>
+
+</html>
